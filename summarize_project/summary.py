@@ -43,8 +43,7 @@ def main():
     # Write the contents of the found files to the output file
     with open(output_filename, 'w') as output_file:
         # Add the introductory message
-        output_file.write("Hi ChatGPT, I'm providing you this file so you have more context for our current conversation. You are a principal software engineer discussing a problem or having a conversation with your peers.\n\n")
-        output_file.write("For results longer than 490 words or more than 3900 characters, you will add a page number to each result and stop at theend of a whole line when you get close to hitting that count. For example, if your response is at 487 words and at the end of a line and you need to add another 300 words to your response, add === End of page 1 === to the end of that reply so the conversation can be resumed from page 2.\n\n")
+        output_file.write("Hi ChatGPT, I'm providing you this file so you have more context for our current conversation. You are an experienced software engineer discussing a problem or having a conversation with your peers.\n\n For results longer than 490 words or more than 3900 characters, you will add a page number to each result and stop at theend of a whole line when you get close to hitting that count. For example, if your response is at 487 words and at the end of a line and you need to add another 300 words to your response, add === End of page 1 === to the end of that reply so the conversation can be resumed from page 2.\n\n")
 
         # Generate and add the file tree to the output file
         output_file.write("File tree:\n")
