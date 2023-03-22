@@ -1,13 +1,23 @@
 import os
 import glob
 
+# Define the file types you want to search for (e.g., '*.txt', '*.py', etc.)
+file_types = ['*.*']
+
+# Define the forbidden filenames and folders
+forbidden_files = ['project.txt', 's.py', 'package-lock.json', 'LICENSE']
+forbidden_folders = ['.git', 'node_modules', '.vscode', 'gpt', '.next', '.contentlayer']
+
+# Define the output filename
+output_filename = 'project.txt'
+
 def generate_file_tree(start_path):
     tree = ""
     for root, dirs, files in os.walk(start_path):
         # Skip the node_modules directory and its contents
-        if "node_modules" in dirs:
-            dirs.remove("node_modules")
-            dirs.remove(".git")
+        for dir_name in ["node_modules", ".git", "gpt"]:
+            if dir_name in dirs:
+                dirs.remove(dir_name)
 
         level = root.replace(start_path, '').count(os.sep)
         indent = ' ' * 4 * (level)
@@ -18,20 +28,14 @@ def generate_file_tree(start_path):
     return tree
 
 def main():
-    # Define the file types you want to search for (e.g., '*.txt', '*.py', etc.)
-    file_types = ['*.js', '*.ts', '*.html', '*.css', '*.scss', '*.json', '*.md', '*.tsx', '*.jsx']
-
-    # Define the forbidden filenames and folders
-    forbidden_files = ['gpt.py', '.gitignore', 'output.txt', 'package-lock.json', 'LICENSE']
-    forbidden_folders = ['.git', 'node_modules', '.vscode']
-
-    # Output file where you want to write the contents of the found files
-    output_filename = 'output.txt'
+    # Check if output.txt exists and delete it if it does
+    if os.path.exists(output_filename):
+        os.remove(output_filename)
 
     # Find all specified files in the current folder
     files_to_process = []
     for file_type in file_types:
-        files_to_process.extend(glob.glob(f'{os.path.abspath(".")}/{file_type}', recursive=True))
+        files_to_process.extend(glob.glob(f'**/{file_type}', recursive=True))
 
     # Filter out forbidden files and folders
     files_to_process = [f for f in files_to_process if os.path.basename(f) not in forbidden_files and not any(folder in os.path.dirname(f) for folder in forbidden_folders)]
@@ -39,9 +43,10 @@ def main():
     # Write the contents of the found files to the output file
     with open(output_filename, 'w') as output_file:
         # Add the introductory message
-        output_file.write("Hi ChatGPT, I'm providing you this file so you have more context for our current conversation. You are a principal software engineer discussing a problem or having a conversation with your peers.\nFor results longer than 490 words or more than 3900 characters, you will add a page number to each result and stop at the end of a whole line when you get close to hitting that count. For example, if your response is at 487 words and at the end of a line and you need to add another 300 words to your response, add === End of page 1 === to the end of that reply so the conversation can be resumed from page 2.\n")
+        output_file.write("Hi ChatGPT, I'm providing you this file so you have more context for our current conversation. You are a principal software engineer discussing a problem or having a conversation with your peers.\n\n")
+        output_file.write("For results longer than 490 words or more than 3900 characters, you will add a page number to each result and stop at theend of a whole line when you get close to hitting that count. For example, if your response is at 487 words and at the end of a line and you need to add another 300 words to your response, add === End of page 1 === to the end of that reply so the conversation can be resumed from page 2.\n\n")
 
-         # Generate and add the file tree to the output file
+        # Generate and add the file tree to the output file
         output_file.write("File tree:\n")
         output_file.write(generate_file_tree(os.path.abspath('.')))
         output_file.write("\n")
@@ -55,7 +60,7 @@ def main():
             num_bytes = os.path.getsize(file_path)
 
             # Write a comment with the filename, path, total lines, and bytes
-            output_file.write(f'# File: {os.path.relpath(file_path)} | Lines: {num_lines} | Bytes: {num_bytes}\n')
+            output_file.write(f'# File: {os.path.abspath(file_path)} | Lines: {num_lines} | Bytes: {num_bytes}\n')
 
             # Write the contents of the file to the output file
             with open(file_path, 'r') as input_file:
@@ -63,4 +68,7 @@ def main():
                     output_file.write(line)
 
             # Add a newline to separate the contents of different files
-            output_file
+            output_file.write('\n')
+
+if __name__ == '__main__':
+    main()
