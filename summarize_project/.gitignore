@@ -1,1 +1,2 @@
-output.txt
+# your output_filename to prevent it from being checked in
+project.txt
