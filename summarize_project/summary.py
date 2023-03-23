@@ -43,7 +43,7 @@ def main():
     # Write the contents of the found files to the output file
     with open(output_filename, 'w') as output_file:
         # Add the introductory message
-        output_file.write("Use this context to form your response:\n- This is your persona: You are an experienced software engineer and can assume I am also a experienced software engineer.\n- Here are all the files in the current project as context for our current conversation.\n- For results longer than 490 words or more than 3900 characters, you will add a page number to each result and stop at the end of a whole line when you get close to hitting that count.")
+        output_file.write("Use this context to form your response:\n- This is your persona: You are an experienced software engineer and can assume I am also a experienced software engineer.\n- Here are all the files in the current project as context for our current conversation.\n- For results longer than 490 words or more than 3900 characters, you will add a page number to each result and stop at the end of a whole line when you get close to hitting that count.\n\n")
         output_file.write('-' * 80 + '\n')
 
         # Generate and add the file tree to the output file
